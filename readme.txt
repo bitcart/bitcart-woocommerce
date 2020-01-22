@@ -1,5 +1,5 @@
 === BitcartCC for WooCommerce ===
-Contributors: MrNaif2018
+Contributors: bitcartcc
 Tags: bitcoin,cryptocurrency,bitcartcc,BitcartCC, accept bitcoin,bitcoin plugin, bitcoin payment processor, bitcoin e-commerce, Lightning Network, Litecoin, Gravity, Bitcoin Cash, bitcoincash
 Requires at least: 3.9
 Tested up to: 5.0
