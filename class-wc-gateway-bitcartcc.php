@@ -291,23 +291,20 @@ function woocommerce_bitcartcc_init()
     /**
      * Validate Notification URL
      */
-    public function validate_url_field($key)
+    public function validate_notification_url_field()
     {
-      $url = $this->get_option($key);
-
-      if (isset($_POST[$this->plugin_id . $this->id . '_' . $key])) {
-        if (
-          filter_var(
-            $_POST[$this->plugin_id . $this->id . '_' . $key],
-            FILTER_VALIDATE_URL
-          ) !== false
-        ) {
-          $url = $_POST[$this->plugin_id . $this->id . '_' . $key];
+      $notification_url = $this->get_option('notification_url', '');
+      if (isset($_POST['woocommerce_bitcartcc_notification_url'])) {
+        $got_url = esc_url_raw(
+          $_POST['woocommerce_bitcartcc_notification_url']
+        );
+        if (filter_var($got_url, FILTER_VALIDATE_URL) !== false) {
+          $notification_url = $got_url;
         } else {
-          $url = '';
+          $notification_url = '';
         }
       }
-      return $url;
+      return $notification_url;
     }
 
     /**
@@ -316,15 +313,10 @@ function woocommerce_bitcartcc_init()
     public function validate_redirect_url_field()
     {
       $redirect_url = $this->get_option('redirect_url', '');
-
       if (isset($_POST['woocommerce_bitcartcc_redirect_url'])) {
-        if (
-          filter_var(
-            $_POST['woocommerce_bitcartcc_redirect_url'],
-            FILTER_VALIDATE_URL
-          ) !== false
-        ) {
-          $redirect_url = $_POST['woocommerce_bitcartcc_redirect_url'];
+        $got_url = esc_url_raw($_POST['woocommerce_bitcartcc_redirect_url']);
+        if (filter_var($got_url, FILTER_VALIDATE_URL) !== false) {
+          $redirect_url = $got_url;
         } else {
           $redirect_url = '';
         }
@@ -371,32 +363,23 @@ function woocommerce_bitcartcc_init()
     public function send_request($url, $fields, $token)
     {
       $options = array(
-        CURLOPT_RETURNTRANSFER => true, // return web page
-        CURLOPT_HEADER => false, // don't return headers
-        CURLOPT_FOLLOWLOCATION => true, // follow redirects
-        CURLOPT_ENCODING => "", // handle all encodings
-        CURLOPT_AUTOREFERER => true, // set referer on redirect
-        CURLOPT_CONNECTTIMEOUT => 120, // timeout on connect
-        CURLOPT_TIMEOUT => 120, // timeout on response
-        CURLOPT_MAXREDIRS => 10, // stop after 10 redirects
-        CURLOPT_HTTPHEADER => array(
-          'Content-Type:application/json',
-          'Authorization: Bearer ' . $token
+        'timeout' => 120,
+        'redirection' => 10,
+        'headers' => array(
+          'Content-Type' => 'application/json',
+          'Authorization' => 'Bearer ' . $token
         )
       );
       if (!is_null($fields)) {
-        $options[CURLOPT_POST] = count($fields);
-        $options[CURLOPT_POSTFIELDS] = json_encode($fields);
+        $options['method'] = 'POST';
+        $options['body'] = json_encode($fields);
       }
       $this->log('    [Info] Sending request to ' . $url);
-      $ch = curl_init($url);
-      curl_setopt_array($ch, $options);
-      $content = curl_exec($ch);
+      $response = wp_remote_request($url, $options);
       $this->log(
-        '    [Info] Status code: ' . curl_getinfo($ch, CURLINFO_HTTP_CODE)
+        '    [Info] Status code: ' . wp_remote_retrieve_response_code($response)
       );
-      curl_close($ch);
-      return $content;
+      return wp_remote_retrieve_body($response);
     }
 
     public function get_invoice($invoice_id)
@@ -1010,11 +993,6 @@ function woocommerce_bitcartcc_failed_requirements()
   if (extension_loaded('openssl') === false) {
     $errors[] =
       'The BitcartCC payment plugin requires the OpenSSL extension for PHP in order to function. Please contact your web server administrator for assistance.';
-  }
-  // Curl required
-  if (false === extension_loaded('curl')) {
-    $errors[] =
-      'The BitcartCC payment plugin requires the Curl extension for PHP in order to function. Please contact your web server administrator for assistance.';
   }
   // PHP 5.4+ required
   if (true === version_compare(PHP_VERSION, '5.4.0', '<')) {
