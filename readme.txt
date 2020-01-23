@@ -91,8 +91,5 @@ You'll find extensive documentation and answers to many of your questions on [do
 
 == Changelog ==
 
-## 1.0.1
-Added screenshots and logo to the plugin
-
 ## 1.0.0
 Initial version
