@@ -2,7 +2,7 @@
 Contributors: bitcartcc
 Tags: bitcoin,cryptocurrency,bitcartcc,BitcartCC, accept bitcoin,bitcoin plugin, bitcoin payment processor, bitcoin e-commerce, Lightning Network, Litecoin, Gravity, Bitcoin Cash, bitcoincash
 Requires at least: 3.9
-Tested up to: 5.0
+Tested up to: 5.3.2
 Requires PHP: 5.4
 Stable tag: master
 License: MIT
@@ -76,6 +76,14 @@ Don't forget to connect your wallet(s) to your store in admin panel, they will b
 ### 5. Testing the checkout ###
 
 Making a small test-purchase from your own store, will give you a piece of mind. Always make sure that everything is set up correctly before going live.
+
+== Screenshots ==
+
+1. The BitcartCC invoice. Your customers will see this at the checkout. They can pay from their wallet by scanning a QR or copy/pasting it manually into the wallet in any of the currencies supported by your installation.
+2. Customizable plugin interface allows store owners to adjust everything according to their needs.
+3. Customer will see the pay with Bitcoin button at the checkout. Text can be customized.
+4. Example of sucessfuly paid invoice.
+5. Example of the store you can launch with BitcartCC ready solutions.
 
 == Frequently Asked Questions ==
 
