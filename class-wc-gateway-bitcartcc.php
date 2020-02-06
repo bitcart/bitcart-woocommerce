@@ -8,7 +8,7 @@
     Text Domain: BitcartCC
     Author URI:  https://github.com/MrNaif2018
 
-    Version:           1.0.0
+    Version:           1.0.1
     License:           Copyright 2018-2020 BitcartCC, MIT License
     License URI:       https://github.com/MrNaif2018/bitcart-woocommerce/blob/master/LICENSE
     GitHub Plugin URI: https://github.com/MrNaif2018/bitcart-woocommerce
@@ -19,7 +19,7 @@ if (false === defined('ABSPATH')) {
   exit();
 }
 
-define("BITCARTCC_VERSION", "1.0.0");
+define("BITCARTCC_VERSION", "1.0.1");
 
 // Ensures WooCommerce is loaded before initializing the BitcartCC plugin
 add_action('plugins_loaded', 'woocommerce_bitcartcc_init', 0);
@@ -555,7 +555,7 @@ function woocommerce_bitcartcc_init()
       $order_total = $order->calculate_totals();
       $order_number = $order->get_order_number();
       $fields = array(
-        'amount' => $order_total,
+        'price' => $order_total,
         'products' => [],
         'store_id' => $this->store_id,
         'order_id' => (string) $order_number,

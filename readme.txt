@@ -93,3 +93,6 @@ You'll find extensive documentation and answers to many of your questions on [do
 
 ## 1.0.0
 Initial version
+
+## 1.0.1
+Fixes for latest BitcartCC API updates
