@@ -6,12 +6,12 @@
     Description: Enable your WooCommerce store to accept cryptocurrencies with BitcartCC.
     Author:      BitcartCC
     Text Domain: BitcartCC
-    Author URI:  https://github.com/MrNaif2018
+    Author URI:  https://github.com/bitcartcc
 
     Version:           1.0.1
     License:           Copyright 2018-2020 BitcartCC, MIT License
-    License URI:       https://github.com/MrNaif2018/bitcart-woocommerce/blob/master/LICENSE
-    GitHub Plugin URI: https://github.com/MrNaif2018/bitcart-woocommerce
+    License URI:       https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
+    GitHub Plugin URI: https://github.com/bitcartcc/bitcart-woocommerce
  */
 
 // Exit if accessed directly

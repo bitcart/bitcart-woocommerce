@@ -6,7 +6,7 @@ Tested up to: 5.3.2
 Requires PHP: 5.4
 Stable tag: master
 License: MIT
-License URI: https://github.com/MrNaif2018/bitcart-woocommerce/blob/master/LICENSE
+License URI: https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
 
 BitcartCC is a free and open-source cryptocurrency payment processor which allows you to receive payments in Bitcoin and altcoins directly, with no fees, transaction cost or a middleman.
 
@@ -49,7 +49,7 @@ To launch your BitcartCC instance, you can self-host it, or use a third party ho
 
 #### 2.1 Self-hosted BitcartCC ####
 
-There are various ways to [launch a self-hosted BitcartCC](https://github.com/MrNaif2018/bitcart-docker). If you do not have technical knowledge, use the [web-wizard method](https://launch.bitcartcc.com) and follow the video below.
+There are various ways to [launch a self-hosted BitcartCC](https://github.com/bitcartcc/bitcart-docker). If you do not have technical knowledge, use the [web-wizard method](https://launch.bitcartcc.com) and follow the video below.
 
 https://youtu.be/9BTYj-SVl4M
 
