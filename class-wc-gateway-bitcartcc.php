@@ -8,7 +8,7 @@ Author:      BitcartCC
 Text Domain: BitcartCC
 Author URI:  https://github.com/bitcartcc
 
-Version:           1.0.1
+Version:           1.0.2
 License:           Copyright 2018-2020 BitcartCC, MIT License
 License URI:       https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
 GitHub Plugin URI: https://github.com/bitcartcc/bitcart-woocommerce
@@ -19,7 +19,7 @@ if (false === defined('ABSPATH')) {
     exit();
 }
 
-define("BITCARTCC_VERSION", "1.0.1");
+define("BITCARTCC_VERSION", "1.0.2");
 
 // Ensures WooCommerce is loaded before initializing the BitcartCC plugin
 add_action('plugins_loaded', 'woocommerce_bitcartcc_init', 0);
@@ -63,8 +63,6 @@ function woocommerce_bitcartcc_init()
             $this->debug = 'yes' === $this->get_option('debug', 'no');
 
             // Define BitcartCC settings
-            $this->api_email = $this->get_option('api_email');
-            $this->api_pass = $this->get_option('api_pass');
             $this->api_url = $this->get_option('api_url');
             $this->store_id = $this->get_option('store_id');
             $this->admin_url = $this->get_option('admin_url');
@@ -79,10 +77,6 @@ function woocommerce_bitcartcc_init()
                 ' and server is PHP v' .
                 $this->debug_php_version
             );
-            $this->log(
-                '    [Info] $this->api_email            = ' . $this->api_email
-            );
-            $this->log('    [Info] $this->api_pass            = ' . $this->api_pass);
             $this->log('    [Info] $this->api_url        = ' . $this->api_url);
             $this->log('    [Info] $this->store_id        = ' . $this->store_id);
             $this->log('    [Info] $this->admin_url        = ' . $this->admin_url);
@@ -132,8 +126,6 @@ function woocommerce_bitcartcc_init()
             // Check that API credentials are set
             if (
                 true === is_null($this->api_url) ||
-                true === is_null($this->api_email) ||
-                true === is_null($this->api_pass) ||
                 true === is_null($this->store_id) ||
                 true === is_null($this->admin_url)
             ) {
@@ -184,24 +176,6 @@ function woocommerce_bitcartcc_init()
                     'type' => 'url',
                     'description' => __(
                         'The URL of your BitcartCC instance',
-                        'bitcartcc'
-                    ),
-                    'desc_tip' => true,
-                ),
-                'api_email' => array(
-                    'title' => __('BitcartCC Login Email', 'bitcartcc'),
-                    'type' => 'email',
-                    'description' => __(
-                        'The Email to login to your BitcartCC instance',
-                        'bitcartcc'
-                    ),
-                    'desc_tip' => true,
-                ),
-                'api_pass' => array(
-                    'title' => __('BitcartCC Login Password', 'bitcartcc'),
-                    'type' => 'password',
-                    'description' => __(
-                        'The Password to login to your BitcartCC instance',
                         'bitcartcc'
                     ),
                     'desc_tip' => true,
@@ -272,7 +246,7 @@ function woocommerce_bitcartcc_init()
                     'type' => 'title',
                     'description' => sprintf(
                         __(
-                            'This plugin version is %s and your PHP version is %s. If you need assistance, please come on our telegram https://t.me/bitcartcc.  Thank you for using BitcartCC!',
+                            'This plugin version is %s and your PHP version is %s. If you need assistance, please join our telegram https://t.me/bitcartcc.  Thank you for using BitcartCC!',
                             'bitcartcc'
                         ),
                         constant("BITCARTCC_VERSION"),
@@ -360,14 +334,13 @@ function woocommerce_bitcartcc_init()
             return $redirect;
         }
 
-        public function send_request($url, $fields, $token)
+        public function send_request($url, $fields = null)
         {
             $options = array(
                 'timeout' => 120,
                 'redirection' => 10,
                 'headers' => array(
                     'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
                 ),
             );
             if (!is_null($fields)) {
@@ -403,22 +376,6 @@ function woocommerce_bitcartcc_init()
             $url = $this->api_url;
             $this->log('    [Info] Set url to ' . sprintf('%s/%s', $url, 'invoices'));
 
-            if (true === empty($this->api_email)) {
-                $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but could not set this->api_email. The empty() check failed!'
-                );
-                throw new \Exception(
-                    ' The BitcartCC payment plugin was called to process a payment but could not set this->api_email. The empty() check failed!'
-                );
-            }
-            if (true === empty($this->api_pass)) {
-                $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but could not set this->api_pass. The empty() check failed!'
-                );
-                throw new \Exception(
-                    ' The BitcartCC payment plugin was called to process a payment but could not set this->api_pass. The empty() check failed!'
-                );
-            }
             if (true === empty($this->store_id)) {
                 $this->log(
                     '    [Error] The BitcartCC payment plugin was called to process a payment but could not set this->store_id. The empty() check failed!'
@@ -556,12 +513,11 @@ function woocommerce_bitcartcc_init()
             $order_number = $order->get_order_number();
             $fields = array(
                 'price' => $order_total,
-                'products' => [],
                 'store_id' => $this->store_id,
                 'order_id' => (string) $order_number,
                 'buyer_email' => $order->get_billing_email(),
                 'notification_url' => $notification_url,
-                'redirect_url' => $redirect_url
+                'redirect_url' => $redirect_url,
             );
             try {
                 $this->log(

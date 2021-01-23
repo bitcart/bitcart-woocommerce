@@ -2,7 +2,7 @@
 Contributors: bitcartcc
 Tags: bitcoin,cryptocurrency,bitcartcc,BitcartCC, accept bitcoin,bitcoin plugin, bitcoin payment processor, bitcoin e-commerce, Lightning Network, Litecoin, Gravity, Bitcoin Cash, bitcoincash
 Requires at least: 3.9
-Tested up to: 5.3.2
+Tested up to: 5.6
 Requires PHP: 5.4
 Stable tag: master
 License: MIT
@@ -96,3 +96,7 @@ Initial version
 
 ## 1.0.1
 Fixes for latest BitcartCC API updates
+
+## 1.0.2
+
+Fixes for BitcartCC API updates
