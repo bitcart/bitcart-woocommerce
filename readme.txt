@@ -64,10 +64,9 @@ BitcartCC WooCommerce plugin is a bridge between your server (payment processor)
 Go to your store dashboard. WooCommerce > Settings > Payments. Click BitcartCC.
 
 1. In the field BitcartCC URL, enter the full URL of your BitcartCC API instance(in most cases api.somedomain.tld) (including the https) – https://api.mydomain.com
-2. In the field BitcartCC Login Email and Password enter login and password of your user from BitcartCC admin panel, it will be used to log in into your instance.
-3. In the field BitcartCC Store ID enter the id of your store(click on copy icon near your store in admin panel to get it), usually it is ID 1 for the first store on your instance.
-4. In the field BitcartCC Admin Panel URL enter the url(including the https) of your admin panel, like https://admin.mydomain.com
-5. You have successfully connected your store! Congratulations!
+2. In the field BitcartCC Store ID enter the id of your store(click on copy icon near your store in admin panel to get it), usually it is ID 1 for the first store on your instance.
+3. In the field BitcartCC Admin Panel URL enter the url(including the https) of your admin panel, like https://admin.mydomain.com
+4. You have successfully connected your store! Congratulations!
 
 ###  4. Connecting your wallet ###
 
