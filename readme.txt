@@ -8,11 +8,11 @@ Stable tag: master
 License: MIT
 License URI: https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
 
-BitcartCC is a free and open-source cryptocurrency payment processor which allows you to receive payments in Bitcoin and altcoins directly, with no fees, transaction cost or a middleman.
+BitcartCC is a free and open-source cryptocurrency payment processor which allows you to receive cryptocurrency payments directly, with no fees, transaction cost or a middleman.
 
 == Description ==
 
-BitcartCC is a free and open-source cryptocurrency payment processor which allows you to receive payments in Bitcoin and altcoins directly, with no fees, transaction cost or a middleman.
+BitcartCC is a free and open-source cryptocurrency payment processor which allows you to receive cryptocurrency payments directly, with no fees, transaction cost or a middleman.
 
 BitcartCC is a non-custodial invoicing system which eliminates the involvement of a third-party. Payments with BitcartCC go directly to your wallet, which increases the privacy and security. Your private keys are never uploaded to the server. There is no address re-use since each invoice generates a new address deriving from your xpubkey.
 
@@ -21,7 +21,7 @@ You can run BitcartCC as a self-hosted solution on your own server, or use a thi
 The self-hosted solution allows you not only to attach an unlimited number of stores and use the Lightning Network but also become the payment processor for others.
 
 
-* Direct, peer-to-peer Bitcoin and altcoin payments
+* Direct, peer-to-peer cryptocurrency payments
 * No transaction fees (other than mining fees by crypto network itself)
 * No processing fees
 * No middleman
