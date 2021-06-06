@@ -99,3 +99,7 @@ Fixes for latest BitcartCC API updates
 ## 1.0.2
 
 Fixes for BitcartCC API updates
+
+## 1.0.3
+
+Compatibility with BitcartCC v0.5.0.0
