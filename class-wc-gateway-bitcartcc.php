@@ -172,10 +172,10 @@ function woocommerce_bitcartcc_init()
                     'desc_tip' => true,
                 ),
                 'api_url' => array(
-                    'title' => __('BitcartCC URL', 'bitcartcc'),
+                    'title' => __('BitcartCC API URL', 'bitcartcc'),
                     'type' => 'url',
                     'description' => __(
-                        'The URL of your BitcartCC instance',
+                        'The API URL of your BitcartCC instance',
                         'bitcartcc'
                     ),
                     'desc_tip' => true,
@@ -728,7 +728,7 @@ function woocommerce_bitcartcc_init()
                 return;
             }
 
-            $expected_invoiceId = (int) get_post_meta(
+            $expected_invoiceId = get_post_meta(
                 $order_id,
                 'BitcartCC_id',
                 true
