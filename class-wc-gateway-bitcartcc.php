@@ -8,7 +8,7 @@ Author:      BitcartCC
 Text Domain: BitcartCC
 Author URI:  https://github.com/bitcartcc
 
-Version:           1.0.3
+Version:           1.0.4
 License:           Copyright 2018-2020 BitcartCC, MIT License
 License URI:       https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
 GitHub Plugin URI: https://github.com/bitcartcc/bitcart-woocommerce
@@ -19,7 +19,7 @@ if (false === defined('ABSPATH')) {
     exit();
 }
 
-define("BITCARTCC_VERSION", "1.0.3");
+define("BITCARTCC_VERSION", "1.0.4");
 
 // Ensures WooCommerce is loaded before initializing the BitcartCC plugin
 add_action('plugins_loaded', 'woocommerce_bitcartcc_init', 0);
