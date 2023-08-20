@@ -1,17 +1,17 @@
 <?php
 
 /*
-Plugin Name: BitcartCC for WooCommerce
-Plugin URI:  https://wordpress.org/plugins/bitcartcc-for-woocommerce
-Description: Enable your WooCommerce store to accept cryptocurrencies with BitcartCC.
-Author:      BitcartCC
-Text Domain: BitcartCC
-Author URI:  https://github.com/bitcartcc
+Plugin Name: Bitcart for WooCommerce
+Plugin URI:  https://wordpress.org/plugins/bitcart-for-woocommerce
+Description: Enable your WooCommerce store to accept cryptocurrencies with Bitcart.
+Author:      Bitcart
+Text Domain: Bitcart
+Author URI:  https://github.com/bitcart
 
 Version:           1.0.5
-License:           Copyright 2018-2020 BitcartCC, MIT License
-License URI:       https://github.com/bitcartcc/bitcart-woocommerce/blob/master/LICENSE
-GitHub Plugin URI: https://github.com/bitcartcc/bitcart-woocommerce
+License:           Copyright 2018-2020 Bitcart, MIT License
+License URI:       https://github.com/bitcart/bitcart-woocommerce/blob/master/LICENSE
+GitHub Plugin URI: https://github.com/bitcart/bitcart-woocommerce
  */
 
 // Exit if accessed directly
@@ -19,15 +19,15 @@ if (false === defined('ABSPATH')) {
     exit();
 }
 
-define("BITCARTCC_VERSION", "1.0.5");
+define("BITCART_VERSION", "1.0.5");
 
-// Ensures WooCommerce is loaded before initializing the BitcartCC plugin
-add_action('plugins_loaded', 'woocommerce_bitcartcc_init', 0);
-register_activation_hook(__FILE__, 'woocommerce_bitcartcc_activate');
+// Ensures WooCommerce is loaded before initializing the Bitcart plugin
+add_action('plugins_loaded', 'woocommerce_bitcart_init', 0);
+register_activation_hook(__FILE__, 'woocommerce_bitcart_activate');
 
-function woocommerce_bitcartcc_init()
+function woocommerce_bitcart_init()
 {
-    if (true === class_exists('WC_Gateway_BitcartCC')) {
+    if (true === class_exists('WC_Gateway_Bitcart')) {
         return;
     }
 
@@ -35,7 +35,7 @@ function woocommerce_bitcartcc_init()
         return;
     }
 
-    class WC_Gateway_BitcartCC extends WC_Payment_Gateway
+    class WC_Gateway_Bitcart extends WC_Payment_Gateway
     {
         private $is_initialized = false;
 
@@ -45,13 +45,13 @@ function woocommerce_bitcartcc_init()
         public function __construct()
         {
             // General
-            $this->id = 'bitcartcc';
+            $this->id = 'bitcart';
             $this->icon = plugin_dir_url(__FILE__) . 'assets/img/icon.png';
             $this->has_fields = false;
-            $this->order_button_text = __('Proceed to BitcartCC', 'bitcartcc');
-            $this->method_title = 'BitcartCC';
+            $this->order_button_text = __('Proceed to Bitcart', 'bitcart');
+            $this->method_title = 'Bitcart';
             $this->method_description =
-                'BitcartCC allows you to accept cryptocurrency payments on your WooCommerce store.';
+                'Bitcart allows you to accept cryptocurrency payments on your WooCommerce store.';
 
             // Load the settings.
             $this->init_form_fields();
@@ -62,17 +62,17 @@ function woocommerce_bitcartcc_init()
             $this->description = $this->get_option('description');
             $this->debug = 'yes' === $this->get_option('debug', 'no');
 
-            // Define BitcartCC settings
+            // Define Bitcart settings
             $this->api_url = $this->get_option('api_url');
             $this->store_id = $this->get_option('store_id');
             $this->admin_url = $this->get_option('admin_url');
 
             // Define debugging & informational settings
             $this->debug_php_version = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
-            $this->debug_plugin_version = constant("BITCARTCC_VERSION");
+            $this->debug_plugin_version = constant("BITCART_VERSION");
 
             $this->log(
-                'BitcartCC Woocommerce payment plugin object constructor called. Plugin is v' .
+                'Bitcart Woocommerce payment plugin object constructor called. Plugin is v' .
                 $this->debug_plugin_version .
                 ' and server is PHP v' .
                 $this->debug_php_version
@@ -93,7 +93,7 @@ function woocommerce_bitcartcc_init()
             } else {
                 $this->enabled = 'yes';
                 $this->log('    [Info] The plugin is ok to use.');
-                add_action('woocommerce_api_wc_gateway_bitcartcc', array(
+                add_action('woocommerce_api_wc_gateway_bitcart', array(
                     $this,
                     'ipn_callback',
                 ));
@@ -102,7 +102,7 @@ function woocommerce_bitcartcc_init()
             $this->is_initialized = true;
         }
 
-        public function is_bitcartcc_payment_method($order)
+        public function is_bitcart_payment_method($order)
         {
             $actualMethod = '';
             if (method_exists($order, 'get_payment_method')) {
@@ -114,7 +114,7 @@ function woocommerce_bitcartcc_init()
                     true
                 );
             }
-            return $actualMethod === 'bitcartcc';
+            return $actualMethod === 'bitcart';
         }
 
         public function __destruct()
@@ -143,7 +143,7 @@ function woocommerce_bitcartcc_init()
         {
             $this->log('    [Info] Entered init_form_fields()...');
             $log_file =
-            'bitcartcc-' . sanitize_file_name(wp_hash('bitcartcc')) . '-log';
+            'bitcart-' . sanitize_file_name(wp_hash('bitcart')) . '-log';
             $logs_href =
                 get_bloginfo('wpurl') .
                 '/wp-admin/admin.php?page=wc-status&tab=logs&log_file=' .
@@ -151,104 +151,104 @@ function woocommerce_bitcartcc_init()
 
             $this->form_fields = array(
                 'title' => array(
-                    'title' => __('Title', 'bitcartcc'),
+                    'title' => __('Title', 'bitcart'),
                     'type' => 'text',
                     'description' => __(
                         'Controls the name of this payment method as displayed to the customer during checkout.',
-                        'bitcartcc'
+                        'bitcart'
                     ),
-                    'default' => __('Bitcoin', 'bitcartcc'),
+                    'default' => __('Bitcoin', 'bitcart'),
                     'desc_tip' => true,
                 ),
                 'description' => array(
-                    'title' => __('Customer Message', 'bitcartcc'),
+                    'title' => __('Customer Message', 'bitcart'),
                     'type' => 'textarea',
                     'description' => __(
                         'Message to explain how the customer will be paying for the purchase.',
-                        'bitcartcc'
+                        'bitcart'
                     ),
                     'default' =>
-                    'You will be redirected to BitcartCC to complete your purchase.',
+                    'You will be redirected to Bitcart to complete your purchase.',
                     'desc_tip' => true,
                 ),
                 'api_url' => array(
-                    'title' => __('BitcartCC API URL', 'bitcartcc'),
+                    'title' => __('Bitcart API URL', 'bitcart'),
                     'type' => 'url',
                     'description' => __(
-                        'The API URL of your BitcartCC instance',
-                        'bitcartcc'
+                        'The API URL of your Bitcart instance',
+                        'bitcart'
                     ),
                     'desc_tip' => true,
                 ),
                 'store_id' => array(
-                    'title' => __('BitcartCC Store ID', 'bitcartcc'),
+                    'title' => __('Bitcart Store ID', 'bitcart'),
                     'type' => 'text',
                     'description' => __(
                         'The ID of the store used for checkout',
-                        'bitcartcc'
+                        'bitcart'
                     ),
                     'desc_tip' => true,
                 ),
                 'admin_url' => array(
-                    'title' => __('BitcartCC Admin Panel URL', 'bitcartcc'),
+                    'title' => __('Bitcart Admin Panel URL', 'bitcart'),
                     'type' => 'url',
                     'description' => __(
                         'The URL of your admin panel, used for checkout',
-                        'bitcartcc'
+                        'bitcart'
                     ),
                     'desc_tip' => true,
                 ),
                 'debug' => array(
-                    'title' => __('Debug Log', 'bitcartcc'),
+                    'title' => __('Debug Log', 'bitcart'),
                     'type' => 'checkbox',
                     'label' => sprintf(
                         __(
                             'Enable logging <a href="%s" class="button">View Logs</a>',
-                            'bitcartcc'
+                            'bitcart'
                         ),
                         $logs_href
                     ),
                     'default' => 'no',
                     'description' => sprintf(
                         __(
-                            'Log BitcartCC events, such as IPN requests, inside <code>%s</code>',
-                            'bitcartcc'
+                            'Log Bitcart events, such as IPN requests, inside <code>%s</code>',
+                            'bitcart'
                         ),
-                        wc_get_log_file_path('bitcartcc')
+                        wc_get_log_file_path('bitcart')
                     ),
                     'desc_tip' => true,
                 ),
                 'notification_url' => array(
-                    'title' => __('Notification URL', 'bitcartcc'),
+                    'title' => __('Notification URL', 'bitcart'),
                     'type' => 'url',
                     'description' => __(
-                        'BitcartCC will send IPNs for orders to this URL with the BitcartCC invoice data',
-                        'bitcartcc'
+                        'Bitcart will send IPNs for orders to this URL with the Bitcart invoice data',
+                        'bitcart'
                     ),
                     'default' => '',
-                    'placeholder' => WC()->api_request_url('WC_Gateway_BitcartCC'),
+                    'placeholder' => WC()->api_request_url('WC_Gateway_Bitcart'),
                     'desc_tip' => true,
                 ),
                 'redirect_url' => array(
-                    'title' => __('Redirect URL', 'bitcartcc'),
+                    'title' => __('Redirect URL', 'bitcart'),
                     'type' => 'url',
                     'description' => __(
-                        'After paying the BitcartCC invoice, users will be redirected back to this URL',
-                        'bitcartcc'
+                        'After paying the Bitcart invoice, users will be redirected back to this URL',
+                        'bitcart'
                     ),
                     'default' => '',
                     'placeholder' => $this->get_return_url(),
                     'desc_tip' => true,
                 ),
                 'support_details' => array(
-                    'title' => __('Plugin & Support Information', 'bitcartcc'),
+                    'title' => __('Plugin & Support Information', 'bitcart'),
                     'type' => 'title',
                     'description' => sprintf(
                         __(
-                            'This plugin version is %s and your PHP version is %s. If you need assistance, please join our telegram https://t.me/bitcartcc.  Thank you for using BitcartCC!',
-                            'bitcartcc'
+                            'This plugin version is %s and your PHP version is %s. If you need assistance, please join our telegram https://t.me/bitcart.  Thank you for using Bitcart!',
+                            'bitcart'
                         ),
-                        constant("BITCARTCC_VERSION"),
+                        constant("BITCART_VERSION"),
                         PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION
                     ),
                 ),
@@ -267,9 +267,9 @@ function woocommerce_bitcartcc_init()
         public function validate_notification_url_field()
         {
             $notification_url = $this->get_option('notification_url', '');
-            if (isset($_POST['woocommerce_bitcartcc_notification_url'])) {
+            if (isset($_POST['woocommerce_bitcart_notification_url'])) {
                 $got_url = esc_url_raw(
-                    $_POST['woocommerce_bitcartcc_notification_url']
+                    $_POST['woocommerce_bitcart_notification_url']
                 );
                 if (filter_var($got_url, FILTER_VALIDATE_URL) !== false) {
                     $notification_url = $got_url;
@@ -286,8 +286,8 @@ function woocommerce_bitcartcc_init()
         public function validate_redirect_url_field()
         {
             $redirect_url = $this->get_option('redirect_url', '');
-            if (isset($_POST['woocommerce_bitcartcc_redirect_url'])) {
-                $got_url = esc_url_raw($_POST['woocommerce_bitcartcc_redirect_url']);
+            if (isset($_POST['woocommerce_bitcart_redirect_url'])) {
+                $got_url = esc_url_raw($_POST['woocommerce_bitcart_redirect_url']);
                 if (filter_var($got_url, FILTER_VALIDATE_URL) !== false) {
                     $redirect_url = $got_url;
                 } else {
@@ -316,11 +316,11 @@ function woocommerce_bitcartcc_init()
             );
         }
 
-        public function get_bitcartcc_redirect($order_id)
+        public function get_bitcart_redirect($order_id)
         {
-            $redirect = get_post_meta($order_id, 'BitcartCC_redirect', true);
+            $redirect = get_post_meta($order_id, 'Bitcart_redirect', true);
             if ($redirect) {
-                $invoice_id = get_post_meta($order_id, 'BitcartCC_id', true);
+                $invoice_id = get_post_meta($order_id, 'Bitcart_id', true);
                 $invoice = json_decode($this->get_invoice($invoice_id));
                 if (!property_exists($invoice, 'id')) {
                     return null;
@@ -377,18 +377,18 @@ function woocommerce_bitcartcc_init()
 
             if (true === empty($this->store_id)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but could not set this->store_id. The empty() check failed!'
+                    '    [Error] The Bitcart payment plugin was called to process a payment but could not set this->store_id. The empty() check failed!'
                 );
                 throw new \Exception(
-                    ' The BitcartCC payment plugin was called to process a payment but could not set this->store_id. The empty() check failed!'
+                    ' The Bitcart payment plugin was called to process a payment but could not set this->store_id. The empty() check failed!'
                 );
             }
             if (true === empty($this->admin_url)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but could not set this->admin_url. The empty() check failed!'
+                    '    [Error] The Bitcart payment plugin was called to process a payment but could not set this->admin_url. The empty() check failed!'
                 );
                 throw new \Exception(
-                    ' The BitcartCC payment plugin was called to process a payment but could not set this->admin_url. The empty() check failed!'
+                    ' The Bitcart payment plugin was called to process a payment but could not set this->admin_url. The empty() check failed!'
                 );
             }
             return $url;
@@ -410,10 +410,10 @@ function woocommerce_bitcartcc_init()
 
             if (true === empty($order_id)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but the order_id was missing.'
+                    '    [Error] The Bitcart payment plugin was called to process a payment but the order_id was missing.'
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process a payment but the order_id was missing. Cannot continue!'
+                    'The Bitcart payment plugin was called to process a payment but the order_id was missing. Cannot continue!'
                 );
             }
 
@@ -421,11 +421,11 @@ function woocommerce_bitcartcc_init()
 
             if (false === $order) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process a payment but could not retrieve the order details for order_id ' .
+                    '    [Error] The Bitcart payment plugin was called to process a payment but could not retrieve the order details for order_id ' .
                     $order_id
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process a payment but could not retrieve the order details for order_id ' .
+                    'The Bitcart payment plugin was called to process a payment but could not retrieve the order details for order_id ' .
                     $order_id .
                     '. Cannot continue!'
                 );
@@ -433,7 +433,7 @@ function woocommerce_bitcartcc_init()
 
             $notification_url = $this->get_option(
                 'notification_url',
-                WC()->api_request_url('WC_Gateway_BitcartCC')
+                WC()->api_request_url('WC_Gateway_Bitcart')
             );
             $this->log(
                 '    [Info] Generating payment form for order ' .
@@ -492,11 +492,11 @@ function woocommerce_bitcartcc_init()
 
             $url = $this->perform_checks();
 
-            $redirect = $this->get_bitcartcc_redirect($order_id);
+            $redirect = $this->get_bitcart_redirect($order_id);
 
             if ($redirect) {
                 $this->log(
-                    '    [Info] Existing BitcartCC invoice has already been created, redirecting to it...'
+                    '    [Info] Existing Bitcart invoice has already been created, redirecting to it...'
                 );
                 $this->log('    [Info] Leaving process_payment()...');
                 return array(
@@ -532,10 +532,10 @@ function woocommerce_bitcartcc_init()
 
                 if (false === isset($invoice) || true === empty($invoice)) {
                     $this->log(
-                        '    [Error] The BitcartCC payment plugin was called to process a payment but could not instantiate an invoice object.'
+                        '    [Error] The Bitcart payment plugin was called to process a payment but could not instantiate an invoice object.'
                     );
                     throw new \Exception(
-                        'The BitcartCC payment plugin was called to process a payment but could not instantiate an invoice object. Cannot continue!'
+                        'The Bitcart payment plugin was called to process a payment but could not instantiate an invoice object. Cannot continue!'
                     );
                 } else {
                     $this->log('    [Info] Call to generate invoice was successful.');
@@ -553,17 +553,17 @@ function woocommerce_bitcartcc_init()
                 return array(
                     'result' => 'success',
                     'messages' =>
-                    'Sorry, but checkout with BitcartCC does not appear to be working.',
+                    'Sorry, but checkout with Bitcart does not appear to be working.',
                 );
             }
 
             $responseData = json_decode($invoice);
 
-            // If another BitcartCC invoice was created before, returns the original one
-            $redirect = $this->get_bitcartcc_redirect($order_id);
+            // If another Bitcart invoice was created before, returns the original one
+            $redirect = $this->get_bitcart_redirect($order_id);
             if ($redirect) {
                 $this->log(
-                    '    [Info] Existing BitcartCC invoice has already been created, redirecting to it...'
+                    '    [Info] Existing Bitcart invoice has already been created, redirecting to it...'
                 );
                 $this->log('    [Info] Leaving process_payment()...');
                 return array(
@@ -574,10 +574,10 @@ function woocommerce_bitcartcc_init()
 
             update_post_meta(
                 $order_id,
-                'BitcartCC_redirect',
+                'Bitcart_redirect',
                 $this->get_invoice_url($responseData->id)
             );
-            update_post_meta($order_id, 'BitcartCC_id', $responseData->id);
+            update_post_meta($order_id, 'Bitcart_id', $responseData->id);
 
             // Reduce stock levels
             if (function_exists('wc_reduce_stock_levels')) {
@@ -586,10 +586,10 @@ function woocommerce_bitcartcc_init()
                 $order->reduce_order_stock();
             }
 
-            $this->log('    [Info] BitcartCC invoice assigned ' . $responseData->id);
+            $this->log('    [Info] Bitcart invoice assigned ' . $responseData->id);
             $this->log('    [Info] Leaving process_payment()...');
 
-            // Redirect the customer to the BitcartCC invoice
+            // Redirect the customer to the Bitcart invoice
             return array(
                 'result' => 'success',
                 'redirect' => $this->get_invoice_url($responseData->id),
@@ -605,7 +605,7 @@ function woocommerce_bitcartcc_init()
             if (true === empty($post)) {
                 $this->log('    [Error] No post data sent to IPN handler!');
                 error_log(
-                    '[Error] BitcartCC plugin received empty POST data for an IPN message.'
+                    '[Error] Bitcart plugin received empty POST data for an IPN message.'
                 );
 
                 wp_die('No post data');
@@ -622,7 +622,7 @@ function woocommerce_bitcartcc_init()
                     '    [Error] Invalid JSON payload sent to IPN handler: ' . $post
                 );
                 error_log(
-                    '[Error] BitcartCC plugin received an invalid JSON payload sent to IPN handler: ' .
+                    '[Error] Bitcart plugin received an invalid JSON payload sent to IPN handler: ' .
                     $post
                 );
 
@@ -637,7 +637,7 @@ function woocommerce_bitcartcc_init()
                     var_export($json, true)
                 );
                 error_log(
-                    '[Error] BitcartCC plugin did not receive an invoice ID present in JSON payload: ' .
+                    '[Error] Bitcart plugin did not receive an invoice ID present in JSON payload: ' .
                     var_export($json, true)
                 );
 
@@ -652,7 +652,7 @@ function woocommerce_bitcartcc_init()
                     var_export($json, true)
                 );
                 error_log(
-                    '[Error] BitcartCC plugin did not receive an invoice status present in JSON payload: ' .
+                    '[Error] Bitcart plugin did not receive an invoice status present in JSON payload: ' .
                     var_export($json, true)
                 );
 
@@ -689,10 +689,10 @@ function woocommerce_bitcartcc_init()
 
             if (false === isset($order_id) && true === empty($order_id)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process an IPN message but could not obtain the order ID from the invoice.'
+                    '    [Error] The Bitcart payment plugin was called to process an IPN message but could not obtain the order ID from the invoice.'
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process an IPN message but could not obtain the order ID from the invoice. Cannot continue!'
+                    'The Bitcart payment plugin was called to process an IPN message but could not obtain the order ID from the invoice. Cannot continue!'
                 );
             } else {
                 $this->log('    [Info] Order ID is: ' . $order_id);
@@ -709,12 +709,12 @@ function woocommerce_bitcartcc_init()
 
             if (false === $order) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process an IPN message but could not retrieve the order details for order_id: "' .
+                    '    [Error] The Bitcart payment plugin was called to process an IPN message but could not retrieve the order details for order_id: "' .
                     $order_id .
-                    '". If you use an alternative order numbering system, please see class-wc-gateway-bitcartcc.php to apply a search filter.'
+                    '". If you use an alternative order numbering system, please see class-wc-gateway-bitcart.php to apply a search filter.'
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process an IPN message but could not retrieve the order details for order_id ' .
+                    'The Bitcart payment plugin was called to process an IPN message but could not retrieve the order details for order_id ' .
                     $order_id .
                     '. Cannot continue!'
                 );
@@ -722,15 +722,15 @@ function woocommerce_bitcartcc_init()
                 $this->log('    [Info] Order details retrieved successfully...');
             }
 
-            if (!$this->is_bitcartcc_payment_method($order)) {
-                $this->log('    [Info] Not using bitcartcc payment method...');
+            if (!$this->is_bitcart_payment_method($order)) {
+                $this->log('    [Info] Not using bitcart payment method...');
                 $this->log('    [Info] Leaving ipn_callback()...');
                 return;
             }
 
             $expected_invoiceId = get_post_meta(
                 $order_id,
-                'BitcartCC_id',
+                'Bitcart_id',
                 true
             );
 
@@ -748,17 +748,17 @@ function woocommerce_bitcartcc_init()
                 $this->log(
                     '    [Error] Received IPN for order ' .
                     $order_id .
-                    ' with BitcartCC invoice id ' .
+                    ' with Bitcart invoice id ' .
                     $json['id'] .
-                    ' while expected BitcartCC invoice is ' .
+                    ' while expected Bitcart invoice is ' .
                     $expected_invoiceId
                 );
                 throw new \Exception(
                     'Received IPN for order ' .
                     $order_id .
-                    ' with BitcartCC invoice id ' .
+                    ' with Bitcart invoice id ' .
                     $json['id'] .
-                    ' while expected BitcartCC invoice is ' .
+                    ' while expected Bitcart invoice is ' .
                     $expected_invoiceId
                 );
             }
@@ -767,10 +767,10 @@ function woocommerce_bitcartcc_init()
 
             if (false === isset($current_status) || true === empty($current_status)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process an IPN message but could not obtain the current status from the order.'
+                    '    [Error] The Bitcart payment plugin was called to process an IPN message but could not obtain the current status from the order.'
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process an IPN message but could not obtain the current status from the order. Cannot continue!'
+                    'The Bitcart payment plugin was called to process an IPN message but could not obtain the current status from the order. Cannot continue!'
                 );
             } else {
                 $this->log(
@@ -783,10 +783,10 @@ function woocommerce_bitcartcc_init()
 
             if (false === isset($checkStatus) && true === empty($checkStatus)) {
                 $this->log(
-                    '    [Error] The BitcartCC payment plugin was called to process an IPN message but could not obtain the current status from the invoice.'
+                    '    [Error] The Bitcart payment plugin was called to process an IPN message but could not obtain the current status from the invoice.'
                 );
                 throw new \Exception(
-                    'The BitcartCC payment plugin was called to process an IPN message but could not obtain the current status from the invoice. Cannot continue!'
+                    'The Bitcart payment plugin was called to process an IPN message but could not obtain the current status from the invoice. Cannot continue!'
                 );
             } else {
                 $this->log(
@@ -804,8 +804,8 @@ function woocommerce_bitcartcc_init()
                     $order->update_status('wc-processing');
                     $order->add_order_note(
                         __(
-                            'BitcartCC invoice payment completed. Payment credited to your merchant account.',
-                            'bitcartcc'
+                            'Bitcart invoice payment completed. Payment credited to your merchant account.',
+                            'bitcart'
                         )
                     );
                     break;
@@ -821,7 +821,7 @@ function woocommerce_bitcartcc_init()
                         'wc-failed',
                         __(
                             'Cryptocurrency payment is invalid for this order! The payment was not confirmed by the network within on time. Do not ship the product for this order!',
-                            'bitcartcc'
+                            'bitcart'
                         )
                     );
                     break;
@@ -832,7 +832,7 @@ function woocommerce_bitcartcc_init()
                         'wc-cancelled',
                         __(
                             'Cryptocurrency payment has expired for this order! The payment was not broadcasted before its expiration. Do not ship the product for this order!',
-                            'bitcartcc'
+                            'bitcart'
                         )
                     );
                     wc_increase_stock_levels($order_id);
@@ -856,35 +856,35 @@ function woocommerce_bitcartcc_init()
                     $this->logger = new WC_Logger();
                 }
 
-                $this->logger->add('bitcartcc', $message);
+                $this->logger->add('bitcart', $message);
             }
         }
     }
     /**
-     * Add BitcartCC Payment Gateway to WooCommerce
+     * Add Bitcart Payment Gateway to WooCommerce
      **/
-    function wc_add_bitcartcc($methods)
+    function wc_add_bitcart($methods)
     {
-        $methods[] = 'WC_Gateway_BitcartCC';
+        $methods[] = 'WC_Gateway_Bitcart';
 
         return $methods;
     }
 
-    add_filter('woocommerce_payment_gateways', 'wc_add_bitcartcc');
+    add_filter('woocommerce_payment_gateways', 'wc_add_bitcart');
 
-    if (!function_exists('bitcartcc_log')) {
-        function bitcartcc_log($message)
+    if (!function_exists('bitcart_log')) {
+        function bitcart_log($message)
         {
             $logger = new WC_Logger();
-            $logger->add('bitcartcc', $message);
+            $logger->add('bitcart', $message);
         }
     }
     /**
      * Add Settings link to the plugin entry in the plugins menu
      **/
-    add_filter('plugin_action_links', 'bitcartcc_plugin_action_links', 10, 2);
+    add_filter('plugin_action_links', 'bitcart_plugin_action_links', 10, 2);
 
-    function bitcartcc_plugin_action_links($links, $file)
+    function bitcart_plugin_action_links($links, $file)
     {
         static $this_plugin;
 
@@ -894,11 +894,11 @@ function woocommerce_bitcartcc_init()
 
         if ($file == $this_plugin) {
             $log_file =
-            'bitcartcc-' . sanitize_file_name(wp_hash('bitcartcc')) . '-log';
+            'bitcart-' . sanitize_file_name(wp_hash('bitcart')) . '-log';
             $settings_link =
             '<a href="' .
             get_bloginfo('wpurl') .
-                '/wp-admin/admin.php?page=wc-settings&tab=checkout&section=wc_gateway_bitcartcc">Settings</a>';
+                '/wp-admin/admin.php?page=wc-settings&tab=checkout&section=wc_gateway_bitcart">Settings</a>';
             $logs_link =
             '<a href="' .
             get_bloginfo('wpurl') .
@@ -911,7 +911,7 @@ function woocommerce_bitcartcc_init()
         return $links;
     }
 
-    function action_woocommerce_thankyou_bitcartcc($order_id)
+    function action_woocommerce_thankyou_bitcart($order_id)
     {
         $wc_order = wc_get_order($order_id);
 
@@ -926,21 +926,21 @@ function woocommerce_bitcartcc_init()
         );
         $payment_status = str_replace(
             '{$statusTitle}',
-            _x('Payment Status', 'woocommerce_bitcartcc'),
+            _x('Payment Status', 'woocommerce_bitcart'),
             $payment_status
         );
-        $status_description = _x('Payment processing', 'woocommerce_bitcartcc');
+        $status_description = _x('Payment processing', 'woocommerce_bitcart');
         echo str_replace('{$paymentStatus}', $status_description, $payment_status);
     }
     add_action(
-        "woocommerce_thankyou_bitcartcc",
-        'action_woocommerce_thankyou_bitcartcc',
+        "woocommerce_thankyou_bitcart",
+        'action_woocommerce_thankyou_bitcart',
         10,
         1
     );
 }
 
-function woocommerce_bitcartcc_failed_requirements()
+function woocommerce_bitcart_failed_requirements()
 {
     global $wp_version;
     global $woocommerce;
@@ -948,18 +948,18 @@ function woocommerce_bitcartcc_failed_requirements()
     $errors = array();
     if (extension_loaded('openssl') === false) {
         $errors[] =
-            'The BitcartCC payment plugin requires the OpenSSL extension for PHP in order to function. Please contact your web server administrator for assistance.';
+            'The Bitcart payment plugin requires the OpenSSL extension for PHP in order to function. Please contact your web server administrator for assistance.';
     }
     // PHP 5.4+ required
     if (true === version_compare(PHP_VERSION, '5.4.0', '<')) {
         $errors[] =
-            'Your PHP version is too old. The BitcartCC payment plugin requires PHP 5.4 or higher to function. Please contact your web server administrator for assistance.';
+            'Your PHP version is too old. The Bitcart payment plugin requires PHP 5.4 or higher to function. Please contact your web server administrator for assistance.';
     }
 
     // Wordpress 3.9+ required
     if (true === version_compare($wp_version, '3.9', '<')) {
         $errors[] =
-            'Your WordPress version is too old. The BitcartCC payment plugin requires Wordpress 3.9 or higher to function. Please contact your web server administrator for assistance.';
+            'Your WordPress version is too old. The Bitcart payment plugin requires Wordpress 3.9 or higher to function. Please contact your web server administrator for assistance.';
     }
 
     // WooCommerce required
@@ -968,7 +968,7 @@ function woocommerce_bitcartcc_failed_requirements()
             'The WooCommerce plugin for WordPress needs to be installed and activated. Please contact your web server administrator for assistance.';
     } elseif (true === version_compare($woocommerce->version, '2.2', '<')) {
         $errors[] =
-        'Your WooCommerce version is too old. The BitcartCC payment plugin requires WooCommerce 2.2 or higher to function. Your version is ' .
+        'Your WooCommerce version is too old. The Bitcart payment plugin requires WooCommerce 2.2 or higher to function. Your version is ' .
         $woocommerce->version .
             '. Please contact your web server administrator for assistance.';
     }
@@ -981,10 +981,10 @@ function woocommerce_bitcartcc_failed_requirements()
 }
 
 // Activating the plugin
-function woocommerce_bitcartcc_activate()
+function woocommerce_bitcart_activate()
 {
     // Check for Requirements
-    $failed = woocommerce_bitcartcc_failed_requirements();
+    $failed = woocommerce_bitcart_failed_requirements();
 
     $plugins_url = admin_url('plugins.php');
 
@@ -993,8 +993,8 @@ function woocommerce_bitcartcc_activate()
         // Deactivate any older versions that might still be present
         $plugins = get_plugins();
         update_option(
-            'woocommerce_bitcartcc_version',
-            constant("BITCARTCC_VERSION")
+            'woocommerce_bitcart_version',
+            constant("BITCART_VERSION")
         );
     } else {
         // Requirements not met, return an error message
