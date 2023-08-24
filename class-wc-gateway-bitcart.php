@@ -8,7 +8,7 @@ Author:      Bitcart
 Text Domain: Bitcart
 Author URI:  https://github.com/bitcart
 
-Version:           1.0.5
+Version:           1.0.6
 License:           Copyright 2018-2020 Bitcart, MIT License
 License URI:       https://github.com/bitcart/bitcart-woocommerce/blob/master/LICENSE
 GitHub Plugin URI: https://github.com/bitcart/bitcart-woocommerce
@@ -19,7 +19,7 @@ if (false === defined('ABSPATH')) {
     exit();
 }
 
-define("BITCART_VERSION", "1.0.5");
+define("BITCART_VERSION", "1.0.6");
 
 // Ensures WooCommerce is loaded before initializing the Bitcart plugin
 add_action('plugins_loaded', 'woocommerce_bitcart_init', 0);

@@ -111,3 +111,7 @@ More fixes for invoice processing, clarify params
 ## 1.0.5
 
 Fixes for stock level not increasing in case of expired invoices
+
+## 1.0.6
+
+Rename BitcartCC to Bitcart
