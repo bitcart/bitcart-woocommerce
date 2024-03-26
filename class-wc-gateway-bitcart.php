@@ -46,6 +46,7 @@ function woocommerce_bitcart_init()
         {
             // General
             $this->id = 'bitcart';
+            $this->enabled = $this->get_option( 'enabled' );
             $this->icon = plugin_dir_url(__FILE__) . 'assets/img/icon.png';
             $this->has_fields = false;
             $this->order_button_text = __('Proceed to Bitcart', 'bitcart');
@@ -87,16 +88,18 @@ function woocommerce_bitcart_init()
             );
 
             // Valid for use and IPN Callback
-            if (false === $this->is_valid_for_use()) {
-                $this->enabled = 'no';
-                $this->log('    [Info] The plugin is NOT valid for use!');
-            } else {
-                $this->enabled = 'yes';
-                $this->log('    [Info] The plugin is ok to use.');
-                add_action('woocommerce_api_wc_gateway_bitcart', array(
-                    $this,
-                    'ipn_callback',
-                ));
+            if ($this->enabled === 'yes') {
+                if ($this->is_valid_for_use()) {
+                    $this->log('    [Info] The plugin is valid to use.');
+                    add_action('woocommerce_api_wc_gateway_bitcart', array(
+                        $this,
+                        'ipn_callback',
+                    ));
+                }else {
+                    $this->enabled = 'no';
+                    $this->log('    [Info] The plugin is NOT valid for use!');
+                    $this->log('    [Info] Please set the API URL, Store ID and Admin URL.');
+                }
             }
 
             $this->is_initialized = true;
@@ -150,6 +153,12 @@ function woocommerce_bitcart_init()
                 $log_file;
 
             $this->form_fields = array(
+                'enabled' => array(
+					'title' => __('Enable/Disable', 'bitcart'),
+					'type' => 'checkbox',
+					'label' => __('Enable Bitcart payment gateway', 'bitcart'),
+					'default' => 'false',
+				),
                 'title' => array(
                     'title' => __('Title', 'bitcart'),
                     'type' => 'text',
