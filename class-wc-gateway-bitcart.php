@@ -836,6 +836,14 @@ function woocommerce_bitcart_init()
                     break;
 
                 case 'expired':
+                    // if the order is completed manually, do not change the status
+                    if ($current_status === 'completed') {
+                        $this->log(
+                            '    [Info] The order is already completed manually, skipping the cancellation...'
+                        );
+                        break;
+                    }
+
                     $this->log('    [Info] The invoice is in the "expired" status...');
                     $order->update_status(
                         'wc-cancelled',
